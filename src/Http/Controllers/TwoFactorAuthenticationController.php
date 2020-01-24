@@ -54,7 +54,10 @@ class TwoFactorAuthenticationController extends Controller implements TwoFactorA
             config('2fa-config.digest_algorithm'),
             config('2fa-config.number_of_digits')
         );
-        $totp->setLabel(config('2fa-config.account_name'));
+
+        $totp->setLabel($user->email);
+        $totp->setIssuer(config('2fa-config.account_name'));
+
         $this->updateUserWithProvisionedUri($totp->getProvisioningUri());
         $barcode = $totp->getQrCodeUri();
         if ($request->ajax()) {
